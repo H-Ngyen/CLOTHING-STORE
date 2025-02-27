@@ -1,4 +1,22 @@
 .products-container {
   display: flex;
   flex-wrap: wrap; 
+  justify-content: center;
+}
+
+.text-input {
+  width: 100%;
+  max-width: 200px;
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.text-input:focus {
+  border-color: #007bff;
 }
