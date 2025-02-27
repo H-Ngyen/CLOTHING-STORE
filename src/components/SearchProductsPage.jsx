@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../css/App.css';
 import { clothes } from '../Clothes';
 import ItemProduct from './ItemProduct';
 export default function SearchProductPage() {
@@ -19,11 +18,26 @@ export default function SearchProductPage() {
                     placeholder="Search product..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="text-input"
+                    style={{
+                        width: "100%",
+                        maxWidth: "200px",
+                        display: "block",
+                        margin: "0 auto 20px",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        borderRadius: "8px",
+                        fontSize: "16px",
+                        outline: "none",
+                        transition: "border-color 0.3s ease"
+                    }}
                 />
             </div>
 
-            <div className="products-container">
+            <div style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center"
+            }}>
                 {filteredProducts.length > 0 ? (
                     filteredProducts.slice(0, 20).map((item, index) => (
                         <ItemProduct key={index} {...item} />
@@ -31,7 +45,7 @@ export default function SearchProductPage() {
                 ) : (
                     <p style={{ textAlign: 'center' }}>No products found.</p>
                 )}
-            </div>
+            </div >
         </>
     );
 }

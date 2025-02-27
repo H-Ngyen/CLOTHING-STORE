@@ -13,8 +13,28 @@ export default function DeleteProductPage() {
 
   return (
     <>
-      <h1 style={{ textAlign: 'center' }}>Our Products</h1>
-      <div className="products-container">
+      <style>{`
+        .remove-button {
+          background-color: #ff4d4d;
+          border: none;
+          padding: 10px 20px;
+          color: #fff;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          margin-top: 10px;
+        }
+        .remove-button:hover {
+          background-color: #ff1a1a;
+        }
+        
+      `}</style>
+      <h1 style={{ textAlign: 'center' }}>Delete Products</h1>
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center"
+      }}>
         {items.map((item) => (
           <div key={item.id} className="item-wrapper">
             <ItemProduct {...item} />

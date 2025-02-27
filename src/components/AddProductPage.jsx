@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import '../css/App.css';
 import { clothes } from '../Clothes';
 import ItemProduct from './ItemProduct';
 
@@ -9,6 +8,7 @@ export default function AddProductPage() {
   const [formData, setFormData] = useState({
     id: '',
     name: '',
+    description: '',
     price: '',
     image: '',
     review: '',
@@ -29,6 +29,7 @@ export default function AddProductPage() {
     setFormData({
       id: '',
       name: '',
+      description: '',
       price: '',
       image: '',
       review: '',
@@ -38,7 +39,36 @@ export default function AddProductPage() {
 
   return (
     <>
-      <h1 style={{ textAlign: 'center' }}>Our Products</h1>
+      <style>{`
+              .form-input {
+                  width: 100%;
+                  max-width: 200px;
+                  display: block;
+                  margin: 0 auto 20px;
+                  padding: 10px;
+                  border: 1px solid #ccc;
+                  border-radius: 8px;
+                  font-size: 16px;
+                  outline: none;
+                  transition: border-color 0.3s ease;
+              }
+
+              .form-button {
+                  border: none;
+                  padding: 10px 20px;
+                  margin: 10px;
+                  font-size: 16px;
+                  border-radius: 8px;
+                  cursor: pointer;
+                  transition: background-color 0.3s ease;
+                  background-color: #4CAF50;
+                  color: #fff;
+              }
+              .form-button:hover{
+                  background-color: #45a049;
+              } 
+    `}</style>
+      <h1 style={{ textAlign: 'center' }}>Add Products</h1>
 
       <div className="form-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
         <input
@@ -53,6 +83,14 @@ export default function AddProductPage() {
           type="text"
           name="name"
           placeholder="Product Name"
+          value={formData.name}
+          onChange={handleChange}
+          className="form-input"
+        />
+        <input
+          type="text"
+          name="description"
+          placeholder="Description"
           value={formData.name}
           onChange={handleChange}
           className="form-input"
@@ -94,7 +132,11 @@ export default function AddProductPage() {
         </button>
       </div>
 
-      <div className="products-container">
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center"
+      }}>
         {products.map((item, index) => (
           <ItemProduct key={index} {...item} />
         ))}

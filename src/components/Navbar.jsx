@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
     return (
         <>
-            <style>{`
+            {/* <style>{`
                 nav {
                     background-color: #333;
                     padding: 1rem;
+                    display: flex;
+                    justify-content: center
                 }
                 
                 nav ul {
@@ -28,15 +30,16 @@ export default function Navbar() {
                 nav ul li a:hover {
                     color: #ff9900;
                 }
-            `}</style>
+            `}</style> */}
             <nav>
                 <ul>
                     <li><Link to="/">Home</Link></li>
-                    <li><Link to="/add-products">Create</Link></li>
-                    <li><Link to="/search-products">Search</Link></li>
-                    <li><Link to="/search-category">Search Catagory</Link></li>
-                    <li><Link to="/update-products">Update</Link></li>
-                    <li><Link to="/delete-products">Delete</Link></li>
+                    <li><Link to="/list-products">List products</Link></li>
+                    <li><Link to="/add-products">Add products</Link></li>
+                    <li><Link to="/search-products">Search products</Link></li>
+                    <li><Link to="/filter-products">Filter product categories</Link></li>
+                    <li><Link to="/update-products">Update products</Link></li>
+                    <li><Link to="/delete-products">Delete products</Link></li>
                 </ul>
             </nav>
         </>
