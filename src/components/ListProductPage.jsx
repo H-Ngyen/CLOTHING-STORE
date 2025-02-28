@@ -15,7 +15,7 @@ export default function ListProductPage() {
         {clothes.slice(0, 20).map((item, index) => (
           <div key={index} style={{ margin: '10px', textAlign: 'center' }}>
             <ItemProduct {...item} />
-            <Link to={`/detail-product/${item.id}`}>Xem chi tiết</Link>
+            <Link to={`/detail-product/${item.id}`}>View Detail</Link>
           </div>
         ))}
       </div>

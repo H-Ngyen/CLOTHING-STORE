@@ -28,13 +28,23 @@ export default function UpdateProductPage() {
         e.preventDefault();
 
         if (action === 'submit') {
+            const { name, description, price, image, review, ordersSold } = editFormData;
+            if (!name || !description || !price || !image || !review || !ordersSold) {
+                alert("Please fill in the information!");
+                return;
+            }
+            if (isNaN(price) || isNaN(review) || isNaN(ordersSold)) {
+                alert("Price, Review and Sold Orders must be valid numbers!");
+                return;
+            }
+
             const updatedProduct = {
                 ...editFormData,
                 price: parseFloat(editFormData.price),
                 review: parseFloat(editFormData.review),
                 ordersSold: parseInt(editFormData.ordersSold, 10),
             };
-
+            
             setProducts(
                 products.map((prod) => (prod.id === updatedProduct.id ? updatedProduct : prod))
             );
@@ -96,13 +106,13 @@ export default function UpdateProductPage() {
                 <div className="form-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
                     <h2>Edit Product</h2>
                     <form onSubmit={(e) => handleEditAction(e, 'submit')}>
-                        <input type="text" name="id" placeholder="ID" value={editFormData.id} onChange={handleEditChange} className="form-input" disabled />
-                        <input type="text" name="name" placeholder="Product Name" value={editFormData.name} onChange={handleEditChange} className="form-input" />
-                        <input type="text" name="description" placeholder="Description" value={editFormData.description} onChange={handleEditChange} className="form-input" />
-                        <input type="text" name="price" placeholder="Price" value={editFormData.price} onChange={handleEditChange} className="form-input" />
-                        <input type="text" name="image" placeholder="Image file name" value={editFormData.image} onChange={handleEditChange} className="form-input" />
+                        <input type="text" name="id" placeholder="ID" value={editFormData.id} onChange={handleEditChange} className="form-input" disabled required/>
+                        <input type="text" name="name" placeholder="Product Name" value={editFormData.name} onChange={handleEditChange} className="form-input" required/>
+                        <input type="text" name="description" placeholder="Description" value={editFormData.description} onChange={handleEditChange} className="form-input" required/>
+                        <input type="text" name="price" placeholder="Price" value={editFormData.price} onChange={handleEditChange} className="form-input" required/>
+                        <input type="text" name="image" placeholder="Image file name" value={editFormData.image} onChange={handleEditChange} className="form-input" required/>
                         <input type="text" name="review" placeholder="Review" value={editFormData.review} onChange={handleEditChange} className="form-input" />
-                        <input type="text" name="ordersSold" placeholder="Orders Sold" value={editFormData.ordersSold} onChange={handleEditChange} className="form-input" />
+                        <input type="text" name="ordersSold" placeholder="Orders Sold" value={editFormData.ordersSold} onChange={handleEditChange} className="form-input" required/>
                         <button type="submit" className="form-button save-button">
                             Save Changes
                         </button>

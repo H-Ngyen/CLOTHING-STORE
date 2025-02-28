@@ -20,12 +20,20 @@ export default function AddProductPage() {
   };
 
   const handleAddProduct = () => {
-    const newProduct = {
-      ...formData
-    };
+    const { id, name, description, price, image, review, ordersSold } = formData;
+    if (!id || !name || !description || !price || !image || !review || !ordersSold) {
+      alert("Please fill in the information!");
+      return;
+    }
+    if (isNaN(price) || isNaN(ordersSold) || isNaN(review)) {
+      alert("Price, Review and Sold Orders must be valid numbers!");
+      return;
+    }
+
+    const newProduct = { ...formData };
 
     setProducts([...products, newProduct]);
-
+    alert(`Added ${newProduct.name}`)
     setFormData({
       id: '',
       name: '',
@@ -78,6 +86,7 @@ export default function AddProductPage() {
           value={formData.id}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <input
           type="text"
@@ -86,14 +95,16 @@ export default function AddProductPage() {
           value={formData.name}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <input
           type="text"
           name="description"
           placeholder="Description"
-          value={formData.name}
+          value={formData.description}  
           onChange={handleChange}
           className="form-input"
+          required
         />
         <input
           type="text"
@@ -102,6 +113,7 @@ export default function AddProductPage() {
           value={formData.price}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <input
           type="text"
@@ -110,6 +122,7 @@ export default function AddProductPage() {
           value={formData.image}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <input
           type="text"
@@ -118,6 +131,7 @@ export default function AddProductPage() {
           value={formData.review}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <input
           type="text"
@@ -126,6 +140,7 @@ export default function AddProductPage() {
           value={formData.ordersSold}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <button onClick={handleAddProduct} className="form-button">
           Add Product
@@ -144,5 +159,3 @@ export default function AddProductPage() {
     </>
   );
 }
-
-
