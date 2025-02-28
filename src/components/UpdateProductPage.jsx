@@ -8,6 +8,7 @@ export default function UpdateProductPage() {
     const [editFormData, setEditFormData] = useState({
         id: '',
         name: '',
+        description: '',
         price: '',
         image: '',
         review: '',
@@ -97,6 +98,7 @@ export default function UpdateProductPage() {
                     <form onSubmit={(e) => handleEditAction(e, 'submit')}>
                         <input type="text" name="id" placeholder="ID" value={editFormData.id} onChange={handleEditChange} className="form-input" disabled />
                         <input type="text" name="name" placeholder="Product Name" value={editFormData.name} onChange={handleEditChange} className="form-input" />
+                        <input type="text" name="description" placeholder="Description" value={editFormData.description} onChange={handleEditChange} className="form-input" />
                         <input type="text" name="price" placeholder="Price" value={editFormData.price} onChange={handleEditChange} className="form-input" />
                         <input type="text" name="image" placeholder="Image file name" value={editFormData.image} onChange={handleEditChange} className="form-input" />
                         <input type="text" name="review" placeholder="Review" value={editFormData.review} onChange={handleEditChange} className="form-input" />
