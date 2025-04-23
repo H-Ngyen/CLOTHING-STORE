@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tw-rounded {
+  border-radius: 1rem;
+}
