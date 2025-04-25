@@ -11,7 +11,6 @@ import RegisterPage from './pages/RegisterPage'
 
 function AppRoutes() {
   const isLoggedIn = !!localStorage.getItem('token')
-
   return (
     <>
       <Router>
@@ -25,7 +24,7 @@ function AppRoutes() {
 
           <Route path='/register-form' element={<Layout><RegisterPage /></Layout>}></Route>
           <Route path='/login-form' element={<Layout><LoginPage /></Layout>}></Route>
-          <Route path='/admin-product-management' element={<Layout>{isLoggedIn ? <ProductManagementPage /> : <Navigate to={'/login-form'} />}</Layout>}></Route>
+          <Route path='/admin-product-management' element={<Layout>{isLoggedIn ? <ProductManagementPage /> : <Navigate to={'/login-form'} /> }</Layout>}></Route>
 
           <Route path='/*' element={<Layout><HomePage /></Layout>}></Route>
         </Routes>
