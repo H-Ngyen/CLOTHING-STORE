@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner, Alert, Image } from 'react-bootstrap';
 import { createMyProductApi, updateMyProductApi } from '../api/MyProductApi';
 
-export default function ProductFormModal({ show, onHide, isEditing, product, onChange, productCount, onProductAdded }) {
+export default function ProductFormModal({ show, onHide, isEditing, product, onChange, products, onProductAdded }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const [imagePreview, setImagePreview] = useState(product?.image || null);
@@ -13,20 +13,33 @@ export default function ProductFormModal({ show, onHide, isEditing, product, onC
             "Pants": "PD02",
             "Shirts": "PD03"
         };
-        
-        const categoryCode = categoryCodeMap[product.category] || "PD01";
-        const nextNumber = productCount + 1;
-        const sequentialNumber = String(nextNumber).padStart(4, '0');
 
-        return `CLOS${categoryCode}${sequentialNumber}`;
+        // Mặc định là PD01 nếu không có danh mục
+        const categoryCode = categoryCodeMap[product.category] || "PD01";
+
+        // Tìm số thứ tự cao nhất từ tất cả sản phẩm
+        let maxSequentialNumber = 0;
+        const validPrefixes = ['CLOSPD01', 'CLOSPD02', 'CLOSPD03'];
+        products.forEach(p => {
+            if (p.id && validPrefixes.some(prefix => p.id.startsWith(prefix))) {
+                const sequentialPart = parseInt(p.id.slice(8), 10);
+                if (!isNaN(sequentialPart) && sequentialPart > maxSequentialNumber) {
+                    maxSequentialNumber = sequentialPart;
+                }
+            }
+        });
+
+        // Tăng số thứ tự lên 1 và định dạng thành 4 chữ số
+        const nextSequentialNumber = String(maxSequentialNumber + 1).padStart(4, '0');
+
+        return `CLOS${categoryCode}${nextSequentialNumber}`;
     };
 
-    const predictedId = !isEditing ? generateNextId() : product.id;
+    const predictedId = !isEditing && product.category ? generateNextId() : product.id;
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            
             onChange({
                 target: {
                     name: 'image',
@@ -91,10 +104,10 @@ export default function ProductFormModal({ show, onHide, isEditing, product, onC
 
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="tw-mb-3">
-                        <Form.Label>{'ID'}</Form.Label>
+                        <Form.Label>ID</Form.Label>
                         <Form.Control
                             type="text"
-                            value={predictedId}
+                            value={predictedId || ''}
                             readOnly
                             className="tw-border tw-border-gray-300 tw-rounded tw-bg-gray-100"
                         />
@@ -120,7 +133,7 @@ export default function ProductFormModal({ show, onHide, isEditing, product, onC
                     <Form.Group className="tw-mb-3">
                         <Form.Label>Price</Form.Label>
                         <Form.Control
-                            type="text"
+                            type="number"
                             name="price"
                             value={product.price}
                             onChange={onChange}
@@ -135,8 +148,10 @@ export default function ProductFormModal({ show, onHide, isEditing, product, onC
                             name="category"
                             value={product.category}
                             onChange={onChange}
+                            required
                             className="tw-border tw-border-gray-300 tw-rounded"
                         >
+                            <option value="">Select Category</option>
                             <option value="Hoodies">Hoodies</option>
                             <option value="Pants">Pants</option>
                             <option value="Shirts">Shirts</option>
@@ -196,7 +211,7 @@ export default function ProductFormModal({ show, onHide, isEditing, product, onC
                         <Button
                             variant="primary"
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || !product.category}
                         >
                             {isSubmitting ? (
                                 <>
@@ -219,4 +234,4 @@ export default function ProductFormModal({ show, onHide, isEditing, product, onC
             </Modal.Body>
         </Modal>
     );
-}   
+}

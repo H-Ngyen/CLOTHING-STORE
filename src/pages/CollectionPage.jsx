@@ -3,15 +3,15 @@ import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 import { getProductApi } from '../api/ProductApi';
 import { useNavigate } from 'react-router-dom';
 
-const IMG_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/uploads/`;
-
 export default function CollectionPage() {
   const [products, setProducts] = useState([]);
   const [filterCategory, setFilterCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [showFilters, setShowFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const PRODUCTS_PER_PAGE = 9;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +43,29 @@ export default function CollectionPage() {
       return 0;
     });
 
+  // Tính tổng số trang
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+
+  // Đảm bảo currentPage hợp lệ
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    } else if (currentPage < 1 && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [currentPage, totalPages]);
+
+  // Lấy sản phẩm cho trang hiện tại
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn lên đầu trang
+  };
+
   return (
     <div>
       {/* Collection Content */}
@@ -71,7 +94,10 @@ export default function CollectionPage() {
                       type="text"
                       placeholder="Search products..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1); // Reset về trang 1 khi tìm kiếm
+                      }}
                     />
                   </Form.Group>
 
@@ -79,7 +105,10 @@ export default function CollectionPage() {
                     <Form.Label className="tw-font-semibold">Category</Form.Label>
                     <Form.Select
                       value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value)}
+                      onChange={(e) => {
+                        setFilterCategory(e.target.value);
+                        setCurrentPage(1); // Reset về trang 1 khi thay đổi danh mục
+                      }}
                     >
                       <option value="">All Categories</option>
                       <option value="Hoodies">Hoodies</option>
@@ -90,7 +119,13 @@ export default function CollectionPage() {
 
                   <Form.Group className="tw-mb-4">
                     <Form.Label className="tw-font-semibold">Sort By</Form.Label>
-                    <Form.Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                    <Form.Select
+                      value={sortBy}
+                      onChange={(e) => {
+                        setSortBy(e.target.value);
+                        setCurrentPage(1); // Reset về trang 1 khi thay đổi sắp xếp
+                      }}
+                    >
                       <option value="name">Name (A-Z)</option>
                       <option value="price-low">Price (Low to High)</option>
                       <option value="price-high">Price (High to Low)</option>
@@ -104,12 +139,17 @@ export default function CollectionPage() {
           {/* Products Grid */}
           <Col md={9}>
             <div className="tw-mb-4 tw-flex tw-justify-between tw-items-center">
-              <p className="tw-mb-0">Showing {filteredProducts.length} products</p>
+              <p className="tw-mb-0">
+                Showing {paginatedProducts.length} of {filteredProducts.length} products
+              </p>
               <div className="tw-hidden md:tw-block">
                 <Form.Select
                   className="tw-w-auto"
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                    setCurrentPage(1); // Reset về trang 1
+                  }}
                 >
                   <option value="name">Sort by: Name (A-Z)</option>
                   <option value="price-low">Sort by: Price (Low to High)</option>
@@ -119,8 +159,8 @@ export default function CollectionPage() {
             </div>
 
             <Row>
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
+              {paginatedProducts.length > 0 ? (
+                paginatedProducts.map((product) => (
                   <Col key={product.id} sm={6} lg={4} className="tw-mb-4">
                     <Card
                       className="tw-h-full tw-shadow-sm tw-transition-all tw-duration-300 hover:tw-shadow-lg"
@@ -129,8 +169,9 @@ export default function CollectionPage() {
                     >
                       <Card.Img
                         variant="top"
-                        src={`${IMG_BASE_URL}/${product.image}`}
+                        src={product.image}
                         className="tw-h-full tw-object-contain"
+                        alt={product.name}
                       />
                       <Card.Body>
                         <Card.Title className="tw-font-bold">{product.name}</Card.Title>
@@ -143,7 +184,6 @@ export default function CollectionPage() {
                           <i className="bi bi-star-fill tw-text-warning tw-mr-1"></i>
                           {`Review: ${product.review || 'No reviews'}`}
                         </div>
-                        
                       </Card.Body>
                     </Card>
                   </Col>
@@ -157,6 +197,7 @@ export default function CollectionPage() {
                     onClick={() => {
                       setSearchTerm('');
                       setFilterCategory('');
+                      setCurrentPage(1);
                     }}
                   >
                     Clear Filters
@@ -168,7 +209,11 @@ export default function CollectionPage() {
             {/* Pagination */}
             {filteredProducts.length > 0 && (
               <div className="tw-mt-6 tw-flex tw-justify-center">
-                <Pagination />
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
               </div>
             )}
           </Col>
@@ -178,26 +223,55 @@ export default function CollectionPage() {
   );
 }
 
-const Pagination = () => {
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  // Giới hạn số nút trang hiển thị (tối đa 5 nút)
+  const maxButtons = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+  let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+  // Điều chỉnh startPage nếu endPage gần cuối
+  if (endPage - startPage + 1 < maxButtons) {
+    startPage = Math.max(1, endPage - maxButtons + 1);
+  }
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
   return (
-    <nav>
+    <nav aria-label="Page navigation">
       <ul className="pagination">
-        <li className="page-item disabled">
-          <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">
+        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+          <button
+            className="page-link"
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Previous"
+          >
             Previous
-          </a>
+          </button>
         </li>
-        <li className="page-item active">
-          <a className="page-link" href="#">1</a>
-        </li>
-        <li className="page-item">
-          <a className="page-link" href="#">2</a>
-        </li>
-        <li className="page-item">
-          <a className="page-link" href="#">3</a>
-        </li>
-        <li className="page-item">
-          <a className="page-link" href="#">Next</a>
+        {pageNumbers.map((page) => (
+          <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(page)}
+              aria-current={currentPage === page ? 'page' : undefined}
+            >
+              {page}
+            </button>
+          </li>
+        ))}
+        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+          <button
+            className="page-link"
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label="Next"
+          >
+            Next
+          </button>
         </li>
       </ul>
     </nav>

@@ -1,43 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Navbar, Nav, Row, Col, Card, Button, Form, Toast } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const IMG_BASE_URL = import.meta.env.BASE_URL;
 
 const HomePage = () => {
-    const featuredProducts = [
-        {
-            id: 'P001',
-            name: 'Smartphone X',
-            price: '999.99',
-            category: 'Electronics',
-            image: 'https://via.placeholder.com/300x200',
-            description: 'Latest smartphone with advanced features'
-        },
-        {
-            id: 'P002',
-            name: 'Laptop Pro',
-            price: '1299.99',
-            category: 'Electronics',
-            image: 'https://via.placeholder.com/300x200',
-            description: 'High-performance laptop for professionals'
-        },
-        {
-            id: 'P003',
-            name: 'Cotton T-Shirt',
-            price: '19.99',
-            category: 'Clothing',
-            image: 'https://via.placeholder.com/300x200',
-            description: 'Comfortable cotton t-shirt'
-        },
-        {
-            id: 'P004',
-            name: 'Coffee Maker',
-            price: '89.99',
-            category: 'Home Appliances',
-            image: 'https://via.placeholder.com/300x200',
-            description: 'Automatic coffee maker with timer'
-        }
-    ];
+    // const featuredProducts = [
+    //     {
+    //         id: 'P001',
+    //         name: 'Smartphone X',
+    //         price: '999.99',
+    //         category: 'Electronics',
+    //         image: 'https://via.placeholder.com/300x200',
+    //         description: 'Latest smartphone with advanced features'
+    //     },
+    //     {
+    //         id: 'P002',
+    //         name: 'Laptop Pro',
+    //         price: '1299.99',
+    //         category: 'Electronics',
+    //         image: 'https://via.placeholder.com/300x200',
+    //         description: 'High-performance laptop for professionals'
+    //     },
+    //     {
+    //         id: 'P003',
+    //         name: 'Cotton T-Shirt',
+    //         price: '19.99',
+    //         category: 'Clothing',
+    //         image: 'https://via.placeholder.com/300x200',
+    //         description: 'Comfortable cotton t-shirt'
+    //     },
+    //     {
+    //         id: 'P004',
+    //         name: 'Coffee Maker',
+    //         price: '89.99',
+    //         category: 'Home Appliances',
+    //         image: 'https://via.placeholder.com/300x200',
+    //         description: 'Automatic coffee maker with timer'
+    //     }
+    // ];
+
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -51,7 +54,7 @@ const HomePage = () => {
                                 Find the best quality products for your everyday needs. Explore our collection now!
                             </p>
                             <div className="tw-flex">
-                                <Button variant="light" size="lg" className="tw-font-semibold tw-mr-3">
+                                <Button variant="light" size="lg" className="tw-font-semibold tw-mr-3" onClick={() => navigate('/collection')}>
                                     Shop Now
                                 </Button>
                             </div>
@@ -68,7 +71,7 @@ const HomePage = () => {
             </div>
 
             {/* Categories Section */}
-            <Container className="tw-py-16">
+            {/* <Container className="tw-py-16">
                 <h2 className="tw-text-3xl tw-font-bold tw-mb-8 tw-text-center">Top Categories</h2>
                 <Row>
                     {['Electronics', 'Clothing', 'Home Appliances', 'Accessories'].map((category, index) => (
@@ -83,10 +86,10 @@ const HomePage = () => {
                         </Col>
                     ))}
                 </Row>
-            </Container>
+            </Container> */}
 
             {/* Featured Products */}
-            <div className="tw-bg-gray-100 tw-py-16">
+            {/* <div className="tw-bg-gray-100 tw-py-16">
                 <Container>
                     <h2 className="tw-text-3xl tw-font-bold tw-mb-8 tw-text-center">Featured Products</h2>
                     <Row>
@@ -108,10 +111,10 @@ const HomePage = () => {
                         <Button variant="outline-primary" size="lg">View All Products</Button>
                     </div>
                 </Container>
-            </div>
+            </div> */}
 
             {/* Testimonials */}
-            <Container className="tw-py-16">
+            {/* <Container className="tw-py-16">
                 <h2 className="tw-text-3xl tw-font-bold tw-mb-8 tw-text-center">What Our Customers Say</h2>
                 <Row>
                     {[1, 2, 3].map(index => (
@@ -138,10 +141,10 @@ const HomePage = () => {
                         </Col>
                     ))}
                 </Row>
-            </Container>
+            </Container> */}
 
             {/* Newsletter */}
-            <div className="tw-bg-blue-600 tw-text-white tw-py-12">
+            {/* <div className="tw-bg-blue-600 tw-text-white tw-py-12">
                 <Container className="tw-text-center">
                     <h2 className="tw-text-3xl tw-font-bold tw-mb-4">Join Our Newsletter</h2>
                     <p className="tw-text-xl tw-mb-6 tw-max-w-2xl tw-mx-auto">
@@ -160,7 +163,7 @@ const HomePage = () => {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </div> */}
         </div>
     );
 };

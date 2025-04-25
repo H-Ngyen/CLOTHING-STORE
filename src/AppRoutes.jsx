@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Layout from './layouts/layout'
 import LoginPage from './pages/LoginPage'
 import ProductManagementPage from './pages/ProductManagementPage'
@@ -10,6 +10,8 @@ import ProductDetailPage from './pages/ProductDetailPage'
 import RegisterPage from './pages/RegisterPage'
 
 function AppRoutes() {
+  const isLoggedIn = !!localStorage.getItem('token')
+
   return (
     <>
       <Router>
@@ -23,7 +25,7 @@ function AppRoutes() {
 
           <Route path='/register-form' element={<Layout><RegisterPage /></Layout>}></Route>
           <Route path='/login-form' element={<Layout><LoginPage /></Layout>}></Route>
-          <Route path='/admin-product-management' element={<Layout><ProductManagementPage /></Layout>}></Route>
+          <Route path='/admin-product-management' element={<Layout>{isLoggedIn ? <ProductManagementPage /> : <Navigate to={'/login-form'} />}</Layout>}></Route>
 
           <Route path='/*' element={<Layout><HomePage /></Layout>}></Route>
         </Routes>

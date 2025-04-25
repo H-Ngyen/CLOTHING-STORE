@@ -5,13 +5,8 @@ import { deleteMyProductApi } from '../api/MyProductApi';
 import ProductTableItem from '../components/ItemProductTable';
 import ProductGridItem from '../components/ItemProductGrid';
 import ProductFormModal from '../components/ProductFormModal';
-import { useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '../auth/auth'; // Import hàm kiểm tra xác thực
-
-const IMG_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/uploads/`;
 
 export default function ProductManagementPage() {
-    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({
@@ -34,37 +29,19 @@ export default function ProductManagementPage() {
     };
 
     const refreshProducts = async () => {
-        try {
-            if (!isAuthenticated()) {
-                navigate('/');
-                return;
-            }
-            
+        try {            
             const productList = await getProductApi();
             setProducts(productList);
         } catch (error) {
             console.error("Failed to load products:", error);
-            
-            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                if (!isAuthenticated()) {
-                    navigate('/');
-                }
-            }
         }
     };
 
     useEffect(() => {        
-        // Gọi API để lấy danh sách sản phẩm
         refreshProducts();
     }, []);
 
     const handleModalShow = (product = null) => {
-        // Kiểm tra xác thực trước khi mở modal
-        if (!isAuthenticated()) {
-            navigate('/');
-            return;
-        }
-        
         if (product) {
             setCurrentProduct({ ...product, image: null }); 
             setIsEditing(true);
@@ -97,11 +74,6 @@ export default function ProductManagementPage() {
     };
 
     const handleDelete = async (id) => {
-        if (!isAuthenticated()) {
-            navigate('/');
-            return;
-        }
-        
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
                 await deleteMyProductApi(id);
@@ -112,11 +84,6 @@ export default function ProductManagementPage() {
                 
                 // Kiểm tra lỗi 401 hoặc 403 để xác định token hết hạn
                 if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                    // Kiểm tra lại xác thực
-                    if (!isAuthenticated()) {
-                        navigate('/');
-                        return;
-                    }
                 }
                 alert('Failed to delete product. Please try again.');
             }
@@ -205,7 +172,6 @@ export default function ProductManagementPage() {
                             <ProductTableItem
                                 key={prod.id}
                                 product={prod}
-                                imgBaseUrl={IMG_BASE_URL}
                                 onEdit={handleModalShow}
                                 onDelete={handleDelete}
                             />
@@ -218,7 +184,6 @@ export default function ProductManagementPage() {
                         <ProductGridItem
                             key={prod.id}
                             product={prod}
-                            imgBaseUrl={IMG_BASE_URL}
                             onEdit={handleModalShow}
                             onDelete={handleDelete}
                         />
@@ -232,7 +197,7 @@ export default function ProductManagementPage() {
                 isEditing={isEditing}
                 product={currentProduct}
                 onChange={handleInputChange}
-                productCount={products.length}
+                products={products}
                 onProductAdded={refreshProducts}
             />
         </Container>

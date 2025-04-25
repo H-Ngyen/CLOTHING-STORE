@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-export default function ItemProductTable({ product, imgBaseUrl, onEdit, onDelete }) {
+export default function ItemProductTable({ product, onEdit, onDelete }) {
     return (
         <tr key={product.id}>
             <td>{product.id}</td>
             <td>
                 <img
-                    src={`${imgBaseUrl}/${product.image}`}
+                    src={product.image}
                     alt={product.name}
                     width="50"
                     height="50"

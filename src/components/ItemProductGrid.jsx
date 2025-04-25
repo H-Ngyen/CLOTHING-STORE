@@ -1,13 +1,13 @@
 import React from 'react';
 import { Card, Button, Col } from 'react-bootstrap';
 
-export default function ItemProductGrid({ product, imgBaseUrl, onEdit, onDelete }) {
+export default function ItemProductGrid({ product, onEdit, onDelete }) {
     return (
         <Col md={4} lg={3} key={product.id} className="tw-mb-4">
             <Card className="tw-h-full tw-shadow-md tw-rounded">
                 <Card.Img
                     variant="top"
-                    src={`${imgBaseUrl}/${product.image}`}
+                    src={product.image}
                     className="tw-h-full tw-object-contain"
                 />
                 <Card.Body>
