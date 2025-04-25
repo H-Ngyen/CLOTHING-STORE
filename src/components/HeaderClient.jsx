@@ -12,7 +12,7 @@ export default function HeaderClient() {
         <header>
             <Navbar bg="dark" variant="dark" expand="lg" className="tw-py-3">
                 <Container>
-                    <Navbar.Brand href="#" className="tw-text-xl tw-font-bold">ProductStore</Navbar.Brand>
+                    <Navbar.Brand href="/home" className="tw-text-xl tw-font-bold">ProductStore</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="tw-ml-auto">
