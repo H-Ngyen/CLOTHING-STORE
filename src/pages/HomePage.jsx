@@ -61,7 +61,7 @@ const HomePage = () => {
                         </Col>
                         <Col md={6}>
                             <img
-                                src={`${IMG_BASE_URL}src/assets/hero2.png`}
+                                src={`http://res.cloudinary.com/djey3wddu/image/upload/v1745568583/sezhk6hvwxxqtoil0qgy.png`}
                                 alt="Hero"
                                 className="tw-rounded-lg tw-shadow-lg tw-w-full"
                             />
